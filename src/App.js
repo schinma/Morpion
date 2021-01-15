@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import './styles/root.scss';
 import Board from './components/Board';
+import History from './components/History';
 import { calculateWinner } from './helpers';
 
 const App = () => {
@@ -23,20 +24,22 @@ const App = () => {
     }
 
     setHistory(previous => {
-      
       const last = previous[previous.length - 1];
-      
+
       const newBoard = last.board.map((square, pos) => {
         if (pos === position) {
           return last.isXNext ? 'X' : 'O';
         }
         return square;
       });
-      return previous.concat({board : newBoard, isXNext: !last.isXNext});
+      return previous.concat({ board: newBoard, isXNext: !last.isXNext });
     });
-    
-    setCurrentMove(previous => previous + 1);
 
+    setCurrentMove(previous => previous + 1);
+  };
+
+  const moveTo = move => {
+    setCurrentMove(move);
   };
 
   return (
@@ -44,6 +47,7 @@ const App = () => {
       <h1>TIC TAC TOE</h1>
       <h2>{message}</h2>
       <Board board={current.board} handleSquareClick={handleSquareClick} />
+      <History history={history} moveTo={moveTo} currentMove={currentMove}/>
     </div>
   );
 };
