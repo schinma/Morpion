@@ -1,42 +1,50 @@
-import React, {useState} from "react";
+import React, { useState } from 'react';
 
 import './styles/root.scss';
 import Board from './components/Board';
 import { calculateWinner } from './helpers';
 
 const App = () => {
+  const [history, setHistory] = useState([
+    { board: Array(9).fill(null), isXNext: true },
+  ]);
 
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [isXNext, setIsXNext] = useState(false);
+  const [currentMove, setCurrentMove] = useState(0);
 
-  const winner = calculateWinner(board);
-  const message = winner ? `Winner is : ${winner}` : `Next player is ${isXNext ? 'X' : 'O'}`;
+  const current = history[currentMove];
+  const winner = calculateWinner(current.board);
+  const message = winner
+    ? `Winner is : ${winner}`
+    : `Next player is ${current.isXNext ? 'X' : 'O'}`;
 
-  const handleSquareClick = (position) => {
+  const handleSquareClick = position => {
+    if (current.board[position] || winner) {
+      return;
+    }
 
-      if (board[position] || winner) {
-          return;
-      }
-
-      setBoard((previous) => {
-          return previous.map((square, pos) => {
-              if(pos === position) {
-                  return isXNext ? 'X' : 'O';
-              } else {
-                  return square;
-              }
-          })
+    setHistory(previous => {
+      
+      const last = previous[previous.length - 1];
+      
+      const newBoard = last.board.map((square, pos) => {
+        if (pos === position) {
+          return last.isXNext ? 'X' : 'O';
+        }
+        return square;
       });
+      return previous.concat({board : newBoard, isXNext: !last.isXNext});
+    });
+    
+    setCurrentMove(previous => previous + 1);
 
-      setIsXNext((prev) => !prev);
-  }
+  };
 
-  return ( 
-  <div className="app">
-   <h1>TIC TAC TOE</h1>
-   <h2>{message}</h2>
-   <Board board={board} handleSquareClick={handleSquareClick}/>
-  </div>
+  return (
+    <div className="app">
+      <h1>TIC TAC TOE</h1>
+      <h2>{message}</h2>
+      <Board board={current.board} handleSquareClick={handleSquareClick} />
+    </div>
   );
 };
 
