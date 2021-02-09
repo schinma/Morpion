@@ -1,6 +1,6 @@
-# Nano React App Default Javascript Template
+# Tictactoe game
 
-The default template project for [nano-react-app](https://github.com/adrianmcli/nano-react-app).
+This is a tictactoe game inspired by the React tutorial. 
 
 - `npm start` — This will spawn a development server with a default port of `1234`.
 - `npm run build` — This will output a production build in the `dist` directory.
@@ -17,14 +17,6 @@ Or edit the `start` script directly:
 
 ```
 parcel index.html -p 3000
-```
-
-## Adding styles
-
-You can use CSS files with simple ES2015 `import` statements anywhere in your Javascript:
-
-```js
-import "./index.css";
 ```
 
 ## Babel transforms
